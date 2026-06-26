@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 Question Quiz Game</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#00c6ff,#0072ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+
+.container{
+    background:white;
+    width:400px;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.3);
+    text-align:center;
+}
+
+button{
+    padding:10px 20px;
+    margin-top:15px;
+    border:none;
+    border-radius:8px;
+    background:#0072ff;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#0055cc;
+}
+
+.option{
+    display:block;
+    margin:10px;
+    padding:10px;
+    background:#f2f2f2;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.option:hover{
+    background:#d9e8ff;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>🎮 3 Question Quiz Game</h2>
+
+<div id="quiz"></div>
+
+<button onclick="nextQuestion()">Next</button>
+
+</div>
+
+<script>
+
+const questions=[
+{
+question:"1. What is the capital of India?",
+options:["Mumbai","Delhi","Kolkata","Chennai"],
+answer:"Delhi"
+},
+{
+question:"2. Which language is used for web pages?",
+options:["Python","Java","HTML","C++"],
+answer:"HTML"
+},
+{
+question:"3. 5 + 7 = ?",
+options:["10","11","12","13"],
+answer:"12"
+}
+];
+
+let current=0;
+let score=0;
+let selected="";
+
+function loadQuestion(){
+
+let q=questions[current];
+
+let html="<h3>"+q.question+"</h3>";
+
+q.options.forEach(op=>{
+html+=`
+<div class="option" onclick="selectOption('${op}')">${op}</div>
+`;
+});
+
+document.getElementById("quiz").innerHTML=html;
+
+selected="";
+}
+
+function selectOption(ans){
+selected=ans;
+
+let options=document.querySelectorAll(".option");
+
+options.forEach(o=>{
+o.style.background="#f2f2f2";
+
+if(o.innerText==ans){
+o.style.background="#90EE90";
+}
+});
+}
+
+function nextQuestion(){
+
+if(selected==""){
+alert("Please select an answer!");
+return;
+}
+
+if(selected==questions[current].answer){
+score++;
+}
+
+current++;
+
+if(current<questions.length){
+loadQuestion();
+}
+else{
+showResult();
+}
+
+}
+
+function showResult(){
+
+let message="";
+
+if(score==3){
+message="🏆 WINNER! Excellent!";
+}
+else if(score==2){
+message="😊 GOOD JOB!";
+}
+else if(score==1){
+message="😐 AVERAGE";
+}
+else{
+message="😢 POOR";
+}
+
+document.getElementById("quiz").innerHTML=`
+<h2>Game Over</h2>
+<h3>Your Score: ${score}/3</h3>
+<h2>${message}</h2>
+`;
+
+document.querySelector("button").style.display="none";
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
